@@ -2,51 +2,7 @@
 session_start();
 require_once "includes/db_connect.php";
 $_SESSION['redirectURL'] = $_SERVER['REQUEST_URI'];
-if(isset($_GET["className"]))
-{
-    //$msg=$_GET["className"];
-    if(isset($_GET["classDate"]))
-    {
-        //$msg=$msg." ".$_GET["classDate"];
-        if(isset($_GET["time"]))
-        {
-            //$msg=$msg." ".$_GET["time"];
-            $sql='call insertOnlineClassReg(:email,:name,:date,:time)';
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(':email',$mail);
-            $stmt->bindParam(':name',$name);
-            $stmt->bindParam(':date',$date);
-            $stmt->bindParam(':time',$time);
-            $mail=$_SESSION['username'];
-            $name=$_GET["className"];
-            $date=$_GET["classDate"];
-            $time=$_GET["time"];
-            $stmt->execute();
-            header("Location:onlineClasses.php");
-        }
-    }
-}
 
-if(isset($_GET['deleteClass']))
-{
-    if(isset($_GET['deleteDate']))
-    {
-        if(isset($_GET['deleteTime']))
-        {
-            $email=$_SESSION['username'];
-            $className=$_GET['deleteClass'];
-            $classDate=$_GET['deleteDate'];
-            $classTime=$_GET['deleteTime'];
-            $RemoveRegistration="DELETE FROM online_class_registration
-            WHERE member_mail='$email'
-            AND class_name='$className'
-            AND class_date='$classDate'
-            AND starting_time='$classTime'";
-            $Result2=$conn->query($RemoveRegistration);
-            header("Location:onlineClasses.php");
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -110,6 +66,7 @@ if(isset($_GET['deleteClass']))
             background-color: #000033;
         }
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
     <div class="onlineClasses-image">
@@ -214,21 +171,23 @@ if(isset($_GET['deleteClass']))
         <script>
             function getbtnId(value)
             {
-                //alert(value.id);
-                //console.log(value.id);
-                //document.getElementById(value.id).innerHTML="Pressed";
                 let num=value.id.substring(value.id.length - 1); 
                 document.getElementById(value.id).innerHTML="Joined";
                 document.getElementById(value.id).style.background="grey";
                 document.getElementById(value.id).disabled= true;
                 document.getElementById("cancelbtn".concat(num)).style.display="inline";
-                let x=document.getElementById("classbtn".concat(num)).innerHTML;
-                let y=document.getElementById("datebtn".concat(num)).innerHTML;
-                let z=document.getElementById("startbtn".concat(num)).innerHTML;
-                window.location.href='onlineClasses.php?className='+x+'&classDate='+y+'&time=' +z;
-                //console.log(x);
-                //console.log(y);
-                //console.log(z);
+                let className=document.getElementById("classbtn".concat(num)).innerHTML;
+                let classDate=document.getElementById("datebtn".concat(num)).innerHTML;
+                let classTime=document.getElementById("startbtn".concat(num)).innerHTML;
+                //window.location.href='onlineClasses.php?className='+x+'&classDate='+y+'&time=' +z;
+                $.ajax({
+                    url:"onlineClassesAjax.php",
+                    method: "POST",
+                    data:{class_name:className,
+                    class_date:classDate,
+                class_time:classTime}
+                });
+
             }
             function getCancel(value)
             {
@@ -237,10 +196,17 @@ if(isset($_GET['deleteClass']))
                 document.getElementById("btn".concat(num)).style.background="#0736a6";
                 document.getElementById("btn".concat(num)).disabled= false;
                 document.getElementById(value.id).style.display="none";
-                let x=document.getElementById("classbtn".concat(num)).innerHTML;
-                let y=document.getElementById("datebtn".concat(num)).innerHTML;
-                let z=document.getElementById("startbtn".concat(num)).innerHTML;
-                window.location.href='onlineClasses.php?deleteClass='+x+'&deleteDate='+y+'&deleteTime=' +z;
+                let className=document.getElementById("classbtn".concat(num)).innerHTML;
+                let classDate=document.getElementById("datebtn".concat(num)).innerHTML;
+                let classTime=document.getElementById("startbtn".concat(num)).innerHTML;
+                //window.location.href='onlineClasses.php?deleteClass='+x+'&deleteDate='+y+'&deleteTime=' +z;
+                $.ajax({
+                    url:"onlineClassesAjax.php",
+                    method: "POST",
+                    data:{c_name:className,
+                    c_date:classDate,
+                c_time:classTime}
+                });
             }
         </script>
     <?php include 'includes/footer.php' ?> 
