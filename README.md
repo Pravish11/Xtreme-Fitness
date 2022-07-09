@@ -1,6 +1,8 @@
 # Xtreme-Fitness
 Our web application enables the user to view our gym services,book a coach and even join online classes such as yoga and zumba
 
+<b>Created by Pravish Digumber and Kevin Moonesawmy</b>
+
 ![image](https://user-images.githubusercontent.com/80615040/177776819-9933e1d0-b53a-4875-a8ae-c22dde3c1d2c.png)
 ![image](https://user-images.githubusercontent.com/80615040/177776931-cac00103-de9e-4bea-8518-b326fd91595a.png)
 ![image](https://user-images.githubusercontent.com/80615040/177777001-93648430-10fd-480b-ba52-80d4662517ef.png)
